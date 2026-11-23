@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>康德義務論的核心理念與職場實踐 | 專業倫理簡報</title>
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0b1329 0%, #172554 50%, #0f172a 100%);
+      --card-bg: rgba(30, 41, 59, 0.72);
+      --card-border: rgba(148, 163, 184, 0.2);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-gold: #f59e0b;
+      --accent-cyan: #38bdf8;
+      --accent-emerald: #10b981;
+      --accent-rose: #f43f5e;
+      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Microsoft JhengHei", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      font-family: var(--font-family);
+      color: var(--text-main);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      user-select: none;
+    }
+
+    /* Top Progress Bar */
+    #progress-container {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+    }
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-gold));
+      transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Slide Deck Container */
+    #deck {
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 70px);
+      margin-top: 6px;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 40px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(40px) scale(0.98);
+      transition: all 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+      overflow-y: auto;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0) scale(1);
+      z-index: 10;
+    }
+
+    .slide.prev {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(-40px) scale(0.98);
+    }
+
+    /* Typography & Badges */
+    .badge {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      width: fit-content;
+    }
+
+    .badge.gold {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--accent-gold);
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+
+    .badge.rose {
+      background: rgba(244, 63, 94, 0.15);
+      color: var(--accent-rose);
+      border-color: rgba(244, 63, 94, 0.4);
+    }
+
+    .badge.emerald {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-emerald);
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    h1.slide-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 8px;
+      background: linear-gradient(to right, #ffffff, #cbd5e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.slide-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: center;
+      width: 100%;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      width: 100%;
+    }
+
+    /* Card Components */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(56, 189, 248, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .card h3 {
+      font-size: 1.35rem;
+      margin-bottom: 12px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card p, .card li {
+      color: #cbd5e1;
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .card ul {
+      margin-left: 20px;
+      margin-top: 10px;
+    }
+
+    .card li {
+      margin-bottom: 8px;
+    }
+
+    /* Callout & Quotes */
+    .quote-box {
+      border-left: 5px solid var(--accent-gold);
+      background: rgba(245, 158, 11, 0.08);
+      padding: 20px 24px;
+      border-radius: 0 14px 14px 0;
+      margin: 16px 0;
+      font-size: 1.25rem;
+      font-style: italic;
+      color: #fef3c7;
+      line-height: 1.6;
+    }
+
+    .quote-author {
+      font-size: 1rem;
+      font-style: normal;
+      color: var(--accent-gold);
+      margin-top: 8px;
+      text-align: right;
+      font-weight: 600;
+    }
+
+    /* Illustration Container */
+    .media-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .media-box img {
+      max-height: 250px;
+      max-width: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.4));
+      margin-bottom: 14px;
+    }
+
+    .media-box span {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* Steps / Process Visual */
+    .flow-steps {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .flow-step {
+      flex: 1;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 18px;
+      position: relative;
+    }
+    .flow-step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    /* Bottom Control Bar */
+    #nav-bar {
+      height: 64px;
+      width: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 100;
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-btn:hover {
+      background: var(--accent-cyan);
+      color: #0f172a;
+      border-color: var(--accent-cyan);
+    }
+
+    #slide-indicator {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .action-group {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    /* Overview Modal */
+    #overview-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(11, 19, 41, 0.95);
+      backdrop-filter: blur(20px);
+      z-index: 200;
+      display: none;
+      flex-direction: column;
+      padding: 40px 60px;
+      overflow-y: auto;
+    }
+
+    #overview-modal.open {
+      display: flex;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .overview-thumb {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .overview-thumb:hover, .overview-thumb.current {
+      border-color: var(--accent-gold);
+      transform: scale(1.03);
+    }
+
+    .overview-thumb h4 {
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+
+    .overview-thumb p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+      }
+      .slide {
+        padding: 30px 24px;
+      }
+      h1.slide-title {
+        font-size: 1.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Progress Bar -->
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+
+  <!-- Slide Deck -->
+  <main id="deck">
+
+    <!-- Slide 1: Cover -->
+    <section class="slide active">
+      <div style="max-width: 900px; margin: 0 auto; text-align: center;">
+        <span class="badge gold">哲學理論與專業實踐 • 核心解析</span>
+        <h1 class="slide-title" style="font-size: 3.4rem; margin-bottom: 16px;">康德義務論的核心理念<br><span style="color: var(--accent-gold);">與職場實踐剖析</span></h1>
+        <p class="slide-subtitle" style="font-size: 1.35rem; max-width: 760px; margin: 0 auto 36px auto;">
+          當剛出社會的新人面對「主管施壓、同儕妥協與利益誘惑」，康德定言令式如何指引我們堅守不可退讓的道德底線？
+        </p>
+        <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 40px;">
+          <div style="background: rgba(255,255,255,0.06); padding: 12px 24px; border-radius: 12px; border: 1px solid var(--card-border);">
+            <div style="color: var(--accent-cyan); font-weight: 700; font-size: 0.9rem;">理論核心</div>
+            <div style="font-size: 1.1rem; color: #fff;">定言令式 • 人是目的非工具</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.06); padding: 12px 24px; border-radius: 12px; border: 1px solid var(--card-border);">
+            <div style="color: var(--accent-gold); font-weight: 700; font-size: 0.9rem;">四案實踐</div>
+            <div style="font-size: 1.1rem; color: #fff;">微腐敗 • 醫療知情 • 學術Tenure • 科技交付</div>
+          </div>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">按方向鍵 [→] 或 [空白鍵] 開始瀏覽</p>
+      </div>
+    </section>
+
+    <!-- Slide 2: Core Philosophy -->
+    <section class="slide">
+      <span class="badge">1. 哲學基石</span>
+      <h1 class="slide-title">動機論與「出於義務」的純粹意志</h1>
+      <p class="slide-subtitle">道德價值不在於外在後果，而在於行為動機是否出於對道德律的純粹敬重。</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>⚖️ 規範倫理學 vs 結果論</h3>
+          <ul>
+            <li><strong>拒絕後果論的功利算計</strong>：結果論（Consequentialism）主張「追求最大多數人的最大利益」；康德則認為<strong>手段本質的正當性先於後果好壞</strong>。</li>
+            <li><strong>出於義務（From Duty）</strong>：
+              <ul>
+                <li>「合乎義務但出於自利」（例如：商人為了商譽而不欺騙）$\rightarrow$ <strong>無真實道德價值</strong>。</li>
+                <li>「純粹出於對道德法則的敬重」（即使面臨孤立與受罰依然誠實）$\rightarrow$ <strong>具備純粹道德價值</strong>。</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <div class="quote-box">
+            「在世界之內，甚至在世界之外，除了<strong>善的意志（Good Will）</strong>，不可能設想任何事物能夠被無條件地視為是善的。」
+            <div class="quote-author">—— 伊曼努爾·康德（Immanuel Kant）</div>
+          </div>
+          <div class="card" style="border-left: 4px solid var(--accent-cyan);">
+            <h4 style="color: var(--accent-cyan); margin-bottom: 8px;">🎓 新人職場啟示</h4>
+            <p>不要以「這樣做公司可以多賺錢」或「這樣做我才能保住考績」作為道德辯護。純粹的善意，是絕不因外部利誘而動搖原則。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 3: Categorical Imperative -->
+    <section class="slide">
+      <span class="badge gold">2. 核心檢驗工具</span>
+      <h1 class="slide-title">最高道德命令：定言令式（Categorical Imperative）</h1>
+      <p class="slide-subtitle">區分「假言」與「定言」，確立不可妥協的普遍法則。</p>
+
+      <div class="grid-2">
+        <div class="card" style="border-top: 4px solid var(--accent-rose);">
+          <span class="badge rose">條件性命令</span>
+          <h3>假言令式（Hypothetical Imperative）</h3>
+          <p><strong>「如果你想要 X，你就必須做 Y。」</strong></p>
+          <ul>
+            <li>本質是<strong>工具理性</strong>與自利交換。</li>
+            <li>「如果我想通過試用期，我就必須幫主管掩飾漏洞。」</li>
+            <li>一旦目的改變或不被發現，行為規範即告失效。</li>
+          </ul>
+        </div>
+
+        <div class="card" style="border-top: 4px solid var(--accent-emerald);">
+          <span class="badge emerald">無條件命令</span>
+          <h3>定言令式（Categorical Imperative）</h3>
+          <p><strong>「無論如何，你都必須做 Y！」</strong></p>
+          <ul>
+            <li>本質是<strong>無條件、絕對且普遍約束</strong>的理性律令。</li>
+            <li>「不可偽造數據，因為偽造本身違背了人類理性的普遍法則。」</li>
+            <li>適用於所有理性存在者，毫無特權與例外。</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flow-steps" style="margin-top: 24px;">
+        <div class="flow-step">
+          <div class="flow-step-num">1</div>
+          <h4 style="color:#fff; margin-bottom:4px;">普遍法則公式</h4>
+          <p style="font-size:0.9rem; color:var(--text-muted);">行動準則能否同時意願成為全世界通行的普遍自然律？</p>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num" style="background:var(--accent-gold);">2</div>
+          <h4 style="color:#fff; margin-bottom:4px;">目的自身公式</h4>
+          <p style="font-size:0.9rem; color:var(--text-muted);">對待任何人（包括自己），永遠當作目的，絕不僅僅當作工具！</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 4: Formula of Universal Law -->
+    <section class="slide">
+      <span class="badge cyan">3. 深入檢驗機制</span>
+      <h1 class="slide-title">公式一：普遍法則公式（Universal Law）</h1>
+      <p class="slide-subtitle">「只依據那條你同時能意願它成為普遍法則的格準去行動。」</p>
+
+      <div class="grid-2">
+        <div>
+          <div class="card" style="margin-bottom: 20px;">
+            <h3>🔍 康德的邏輯矛盾檢驗四步驟</h3>
+            <ol style="margin-left: 20px; color: #cbd5e1; line-height: 1.8;">
+              <li><strong>提煉個人格準</strong>：「當對我有利時，我可以許下虛假承諾或隱匿瑕疵。」</li>
+              <li><strong>普遍化設想</strong>：「想像全世界所有人只要對自己有利，都在許下假承諾。」</li>
+              <li><strong>邏輯自毀檢驗</strong>：在所有人都在說謊的世界裡，<strong>「承諾」這一概念將徹底崩潰且失去意義</strong>！沒有人會再相信任何承諾。</li>
+              <li><strong>結論判定</strong>：該格準在邏輯上<strong>自我矛盾</strong>，因此說謊或做假在理性上被絕對禁止。</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="media-box">
+          <img src="../assets/poster_ihan_rakugaki_man.png" alt="違規塗鴉與破窗行為">
+          <h4 style="color: #fff; margin-bottom: 6px;">破窗與潛規則的自相矛盾</h4>
+          <span>當同事說「大家都拿、沒人發現」時，普遍化檢驗證明：若所有員工都私帶公物，公司治理與聘僱信任即刻瓦解。</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 5: Formula of Humanity as an End -->
+    <section class="slide">
+      <span class="badge gold">4. 尊嚴與自主</span>
+      <h1 class="slide-title">公式二：目的自身公式（Humanity as an End）</h1>
+      <p class="slide-subtitle">「對待人身中的人性，永遠同時當作目的，絕不僅僅當作工具（means）。」</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>💎 什麼是「將人當作目的」？</h3>
+          <ul>
+            <li><strong>尊重理性自主權（Autonomy）</strong>：每個人都是獨立思考、有自決尊嚴的理性主體。</li>
+            <li><strong>反對資訊剝奪與欺瞞</strong>：若刻意隱瞞真相、提供虛假數據，等同剝奪了對方的理性選擇能力，將對方矮化為達成己方目的的道具。</li>
+            <li><strong>知情同意（Informed Consent）</strong>的哲學基石：不論是病患、學生還是消費者，都有權獲得完整真實資訊。</li>
+          </ul>
+        </div>
+
+        <div class="card" style="background: rgba(244, 63, 94, 0.08); border-color: rgba(244, 63, 94, 0.3);">
+          <h3 style="color: var(--accent-rose);">🚫 職場中的「工具化」陷阱</h3>
+          <ul>
+            <li><strong>對病患</strong>：以「保護情緒」為由隱瞞末期病情，把病患當作免生麻煩的被支配客體。</li>
+            <li><strong>對學生</strong>：為了換取學院贊助或 Tenure，將學生成績作為討好金主的利益籌碼。</li>
+            <li><strong>對公眾</strong>：為了公司股票融資而隱匿軟體漏洞，將數百萬用戶財產置於危險之中充當肉盾。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 6: Case Study 1 - Office Supplies -->
+    <section class="slide">
+      <span class="badge">實例剖析 1</span>
+      <h1 class="slide-title">職場微腐敗：同事私帶公物回家「大家都拿」</h1>
+      <p class="slide-subtitle">對應 Wiki 案例 2：[[case-02-office-supplies-peer-pressure]]</p>
+
+      <div class="grid-2">
+        <div>
+          <div class="card" style="margin-bottom: 18px;">
+            <h4 style="color: var(--accent-gold); margin-bottom: 8px;">📍 兩難情境還原</h4>
+            <p>老鳥阿凱私自把昂貴專用紙與雷射筆塞進背包，並塞一支給剛入職的阿豪：「這算員工小福利，大家都拿，只要不說就沒人知道，拿去用！」</p>
+          </div>
+          <div class="card">
+            <h4 style="color: var(--accent-cyan); margin-bottom: 8px;">🧠 康德義務論的精準診斷</h4>
+            <ul>
+              <li><strong>普遍化公式檢驗</strong>：偷竊行為無法普遍化。無論價值是一支原子筆還是一百萬資產，不告而取在概念上必然自毀聘僱契約。</li>
+              <li><strong>道德誘惑（Moral Temptation）</strong>：此情境屬於對錯分明的「道德誘惑」，而非真正的道德兩難。阿豪受同儕壓力動搖屬於《行為倫理學》中的道德軟弱。</li>
+              <li><strong>行動指引</strong>：堅決拒收，守住底線；絕不在任何虛假的報銷單與盤點表上共同背書。</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="media-box">
+          <img src="../assets/job_roudou_kijun_kantokukan_black_kigyou.png" alt="職場監管與微腐敗防範">
+          <h4 style="color:#fff; margin-bottom:4px;">「大家都拿」是相對主義的偽辯護</h4>
+          <span>康德絕對禁止為自己開特例。微小的貪婪是職業誠信崩壞的第一張骨牌。</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 7: Case Study 2 - Hospital Privacy -->
+    <section class="slide">
+      <span class="badge emerald">實例剖析 2</span>
+      <h1 class="slide-title">醫療現場：病患知情權 vs. 家屬隱瞞要求</h1>
+      <p class="slide-subtitle">對應 Wiki 案例 1：[[case-01-hospital-privacy-disclosure]]</p>
+
+      <div class="grid-2">
+        <div class="media-box">
+          <img src="../assets/job_syokugyou_taiken_kangoshi_boy.png" alt="護理師執業倫理">
+          <h4 style="color:#fff; margin-bottom:4px;">受託責任的核心是誰？</h4>
+          <span>專業護理人員的最高受託對象是「病患本人的自主生命」，而非家屬的代位支配。</span>
+        </div>
+
+        <div>
+          <div class="card" style="margin-bottom: 18px;">
+            <h4 style="color: var(--accent-gold); margin-bottom: 8px;">📍 兩難情境還原</h4>
+            <p>清醒的胃癌晚期伯伯懇切詢問檢查結果，希望安排餘生交代後事；家屬以「避免父親崩潰」為由威脅醫護團隊絕不可說實話，否則提告投訴。</p>
+          </div>
+          <div class="card">
+            <h4 style="color: var(--accent-emerald); margin-bottom: 8px;">🧠 康德義務論的精準診斷</h4>
+            <ul>
+              <li><strong>踐踏目的自身公式</strong>：家屬的家長式作風（Paternalism）把病患當成了「脆弱的受支配對象」，實質剝奪了他作為理性存有安排生命的知情權利。</li>
+              <li><strong>說謊在道德上被絕對禁止</strong>：護理師小雯若協助說謊，等同成為系統性欺瞞的共犯。</li>
+              <li><strong>行動指引</strong>：不對病患說謊，但避免草率衝突；主動要求召開正式病情說明會，落實知情同意權。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 8: Case Study 3 - Academic Tenure -->
+    <section class="slide">
+      <span class="badge rose">實例剖析 3</span>
+      <h1 class="slide-title">象牙塔生存戰：資深教授違規評分與 Tenure 威脅</h1>
+      <p class="slide-subtitle">對應 Wiki 案例 3：[[case-03-academic-grading-vs-tenure]]</p>
+
+      <div class="grid-2">
+        <div>
+          <div class="card" style="margin-bottom: 18px;">
+            <h4 style="color: var(--accent-gold); margin-bottom: 8px;">📍 兩難情境還原</h4>
+            <p>年輕助理教授林博士發現講座教授 A 放水給捐款金主二代 85 分高分，向 A 教授反應卻被暗示威脅：「不顧全大局，明年的 Tenure 評審小心過不了。」</p>
+          </div>
+          <div class="card">
+            <h4 style="color: var(--accent-rose); margin-bottom: 8px;">🧠 康德義務論的精準診斷</h4>
+            <ul>
+              <li><strong>不可將人當作換取職位的籌碼</strong>：若為了保住個人教職而配合放水，是把辛勤苦讀的其他學生當作工具，也把神聖的學位文憑商品化。</li>
+              <li><strong>定言令式的剛性要求</strong>：捍衛學術誠信是教師的絕對義務，不得以「先妥協拿到教職、以後再當好人」為藉口。</li>
+              <li><strong>行動指引</strong>：堅持自己負責區塊依規實打成績，絕不主動簽核虛假成績冊；留存完整客觀卷證自保。</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="media-box">
+          <img src="../assets/study_school_jugyou_woman.png" alt="大學課堂與學術誠信">
+          <h4 style="color:#fff; margin-bottom:4px;">學術正義不容妥協</h4>
+          <span>如果你在強權前屈服第一次，當你拿到 Tenure 時，你早已成為當初自己痛恨的大老。</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 9: Case Study 4 - Software Vulnerability -->
+    <section class="slide">
+      <span class="badge cyan">實例剖析 4</span>
+      <h1 class="slide-title">科技交付壓力：新人工程師發現資安漏洞 vs 主管下令隱匿</h1>
+      <p class="slide-subtitle">對應 Wiki 案例 5：[[case-05-tech-safety-boss-pressure]]</p>
+
+      <div class="grid-2">
+        <div class="media-box">
+          <img src="../assets/computer_programming_woman.png" alt="軟體工程師與資安漏洞審查">
+          <h4 style="color:#fff; margin-bottom:4px;">代碼是數位時代的無形大橋</h4>
+          <span>工程師敲下的每一行代碼都攸關無數家庭的財產與信任。專業簽核權絕不可賤賣。</span>
+        </div>
+
+        <div>
+          <div class="card" style="margin-bottom: 18px;">
+            <h4 style="color: var(--accent-gold); margin-bottom: 8px;">📍 兩難情境還原</h4>
+            <p>志偉在上線前三天發現轉帳邏輯漏洞，副總拍桌怒斥：「延期發布融資會破局，大家沒薪水！立刻刪除日誌簽署部署單，別忘了你還在試用期！」</p>
+          </div>
+          <div class="card">
+            <h4 style="color: var(--accent-cyan); margin-bottom: 8px;">🧠 康德義務論的精準診斷</h4>
+            <ul>
+              <li><strong>公眾不能被當作融資肉盾</strong>：將數百萬用戶存款暴露在已知致命漏洞下，是極端將人工具化的行徑。</li>
+              <li><strong>普遍化檢驗</strong>：若全體工程師都因試用期壓力隱瞞漏洞，科技社會的基礎信用將徹底瓦解。因此簽名違規在理性上是自我毀滅。</li>
+              <li><strong>抗拒米爾格倫盲從</strong>：展現道德能動者的勇氣，拒絕違背專業自主性簽核。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 10: Critiques and Limitations -->
+    <section class="slide">
+      <span class="badge gold">5. 深度思辨</span>
+      <h1 class="slide-title">康德義務論的現實挑戰與局限反思</h1>
+      <p class="slide-subtitle">在殘酷多變的現代職場中，我們該如何看待康德理論的剛性要求？</p>
+
+      <div class="grid-3">
+        <div class="card">
+          <h3 style="color: var(--accent-rose);">⚠️ 過於嚴苛與缺乏彈性</h3>
+          <p>康德著名的「門口兇手（Murderer at the door）」思想實驗主張：即使兇手在門口追殺朋友，你依然不能說謊。在現實極端情境下，過度死板可能導致災難性後果。</p>
+        </div>
+
+        <div class="card">
+          <h3 style="color: var(--accent-gold);">⚡ 義務衝突缺乏排序</h3>
+          <p>當「保密義務」與「拯救生命的義務」同時碰撞時，康德未提供精確裁決機制。這正是促成後續 <strong>W. D. Ross 顯見義務論（不傷害原則優先）</strong> 誕生的關鍵。</p>
+        </div>
+
+        <div class="card">
+          <h3 style="color: var(--accent-cyan);">🛡️ 新人的制度性弱勢</h3>
+          <p>要求剛出社會、毫無資源的弱勢菜鳥「以死明志」硬撞體制是不人道的。現代專業倫理強調<strong>「在堅守原則的同時，懂得運用合規程序與留存卷證自我防護」</strong>。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 11: Summary & Takeaway -->
+    <section class="slide">
+      <div style="max-width: 900px; margin: 0 auto; text-align: center;">
+        <span class="badge emerald">總結 • 專業倫理金句</span>
+        <h1 class="slide-title" style="font-size: 3rem; margin-bottom: 24px;">從道德底線，走向道德勇氣</h1>
+        
+        <div class="quote-box" style="text-align: left; margin-bottom: 30px;">
+          「事情的真相是，你永遠知道正確該做的事是什麼。困難的地方在於去執行它。」
+          <div class="quote-author">—— 諾曼·史瓦茲柯夫將軍（Norman Schwarzkopf）</div>
+        </div>
+
+        <div class="grid-3" style="text-align: left; margin-bottom: 36px;">
+          <div class="card">
+            <h4 style="color: var(--accent-cyan); margin-bottom: 6px;">1. 普遍化審視</h4>
+            <p style="font-size: 0.95rem;">如果你做的事成為全世界的潛規則，這個世界能維持運轉嗎？</p>
+          </div>
+          <div class="card">
+            <h4 style="color: var(--accent-gold); margin-bottom: 6px;">2. 人是目的</h4>
+            <p style="font-size: 0.95rem;">永遠不要把病患、學生、客戶或同事當作自己換取考績與利益的工具。</p>
+          </div>
+          <div class="card">
+            <h4 style="color: var(--accent-emerald); margin-bottom: 6px;">3. 道德能動者</h4>
+            <p style="font-size: 0.95rem;">法律只是最低底線。在白袍、西裝與鍵盤背後，用專業良知守護公共福祉。</p>
+          </div>
+        </div>
+
+        <p style="color: var(--text-muted); font-size: 1.1rem; font-weight: 600;">
+          做正確的事，只因為它是正確的。—— 伊曼努爾·康德
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation Bar -->
+  <footer id="nav-bar">
+    <div class="action-group">
+      <button class="nav-btn" id="prev-btn" title="上一頁 (Left Arrow)">← 上一張</button>
+      <button class="nav-btn" id="next-btn" title="下一頁 (Right Arrow / Space)">下一張 →</button>
+      <span id="slide-indicator">1 / 11</span>
+    </div>
+
+    <div class="action-group">
+      <button class="nav-btn" id="overview-btn" title="總覽檢視 (O)">📑 投影片總覽</button>
+      <button class="nav-btn" id="fullscreen-btn" title="全螢幕切換 (F)">⛶ 全螢幕</button>
+    </div>
+  </footer>
+
+  <!-- Overview Modal -->
+  <div id="overview-modal">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 16px;">
+      <h2 style="color: #fff;">📑 投影片全局總覽</h2>
+      <button class="nav-btn" id="close-overview-btn">關閉 (Esc)</button>
+    </div>
+    <div class="overview-grid" id="overview-grid-content"></div>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progress-bar');
+    const slideIndicator = document.getElementById('slide-indicator');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const overviewBtn = document.getElementById('overview-btn');
+    const closeOverviewBtn = document.getElementById('close-overview-btn');
+    const overviewModal = document.getElementById('overview-modal');
+    const overviewGridContent = document.getElementById('overview-grid-content');
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+
+    function updateSlide(index) {
+      if (index < 0) index = 0;
+      if (index >= totalSlides) index = totalSlides - 1;
+
+      slides.forEach((slide, i) => {
+        slide.classList.remove('active', 'prev');
+        if (i === index) {
+          slide.classList.add('active');
+        } else if (i < index) {
+          slide.classList.add('prev');
+        }
+      });
+
+      currentSlide = index;
+      const progress = ((index + 1) / totalSlides) * 100;
+      progressBar.style.width = progress + '%';
+      slideIndicator.textContent = `${index + 1} / ${totalSlides}`;
+
+      // Update overview thumbnails
+      document.querySelectorAll('.overview-thumb').forEach((thumb, i) => {
+        thumb.classList.toggle('current', i === index);
+      });
+    }
+
+    function next() {
+      if (currentSlide < totalSlides - 1) updateSlide(currentSlide + 1);
+    }
+
+    function prev() {
+      if (currentSlide > 0) updateSlide(currentSlide - 1);
+    }
+
+    // Keyboard controls
+    window.addEventListener('keydown', (e) => {
+      if (overviewModal.classList.contains('open')) {
+        if (e.key === 'Escape') toggleOverview(false);
+        return;
+      }
+
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        next();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'Backspace') {
+        e.preventDefault();
+        prev();
+      } else if (e.key.toLowerCase() === 'o') {
+        toggleOverview(true);
+      } else if (e.key.toLowerCase() === 'f') {
+        toggleFullscreen();
+      }
+    });
+
+    prevBtn.addEventListener('click', prev);
+    nextBtn.addEventListener('click', next);
+
+    // Overview modal logic
+    function toggleOverview(open) {
+      if (open) {
+        overviewGridContent.innerHTML = '';
+        slides.forEach((slide, i) => {
+          const title = slide.querySelector('h1')?.textContent || `Slide ${i + 1}`;
+          const badge = slide.querySelector('.badge')?.textContent || '';
+          const thumb = document.createElement('div');
+          thumb.className = `overview-thumb ${i === currentSlide ? 'current' : ''}`;
+          thumb.innerHTML = `
+            <div style="font-size:0.75rem; color:var(--accent-gold); font-weight:700;">#${i + 1} ${badge}</div>
+            <h4>${title}</h4>
+          `;
+          thumb.addEventListener('click', () => {
+            updateSlide(i);
+            toggleOverview(false);
+          });
+          overviewGridContent.appendChild(thumb);
+        });
+        overviewModal.classList.add('open');
+      } else {
+        overviewModal.classList.remove('open');
+      }
+    }
+
+    overviewBtn.addEventListener('click', () => toggleOverview(true));
+    closeOverviewBtn.addEventListener('click', () => toggleOverview(false));
+
+    // Fullscreen toggle
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    // Initialize
+    updateSlide(0);
+  </script>
+</body>
+</html>

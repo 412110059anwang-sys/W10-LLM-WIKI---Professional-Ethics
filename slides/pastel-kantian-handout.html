@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>康德義務論圖文講義 • 菜鳥新人的職場良心守護指南</title>
+  <!-- Google Fonts: 日系可愛圓體 Zen Maru Gothic & M PLUS Rounded 1c -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* 溫暖馬卡龍粉彩調色盤 */
+      --bg-cream: #fdfaf5;
+      --bg-gradient: linear-gradient(135deg, #fffbf5 0%, #fef5ea 50%, #fbf3ee 100%);
+      --text-dark: #3e3228;
+      --text-soft: #7a6e65;
+      
+      --pink-card: #fdf2f4;
+      --pink-border: #fbcfe8;
+      --pink-accent: #f472b6;
+      --pink-text: #db2777;
+
+      --yellow-card: #fffdf0;
+      --yellow-border: #fef08a;
+      --yellow-accent: #f59e0b;
+      --yellow-text: #b45309;
+
+      --green-card: #f2fcf6;
+      --green-border: #bbf7d0;
+      --green-accent: #34d399;
+      --green-text: #059669;
+
+      --blue-card: #f0f9ff;
+      --blue-border: #bae6fd;
+      --blue-accent: #38bdf8;
+      --blue-text: #0284c7;
+
+      --purple-card: #faf5ff;
+      --purple-border: #e9d5ff;
+      --purple-accent: #c084fc;
+      --purple-text: #9333ea;
+
+      --card-shadow: 0 10px 26px -6px rgba(180, 140, 120, 0.12);
+      --font-cute: "Zen Maru Gothic", "M PLUS Rounded 1c", "PingFang TC", "Microsoft JhengHei UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      font-family: var(--font-cute);
+      color: var(--text-dark);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      user-select: none;
+    }
+
+    /* 頂部彩虹粉彩進度條 */
+    #progress-container {
+      width: 100%;
+      height: 8px;
+      background: #fce7d8;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 100;
+    }
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #f472b6, #fbbf24, #34d399, #38bdf8);
+      border-radius: 0 4px 4px 0;
+      transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* 投影片主畫布 */
+    #deck {
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 76px);
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 28px 52px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(18px) scale(0.98);
+      transition: all 0.45s cubic-bezier(0.34, 1.25, 0.64, 1);
+      overflow-y: auto;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+      z-index: 10;
+    }
+
+    .slide.prev {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-18px) scale(0.98);
+    }
+
+    /* 可愛標籤 Badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 15px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      width: fit-content;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    }
+    .badge.pink { background: #ffe4e6; color: var(--pink-text); border: 2px solid var(--pink-border); }
+    .badge.yellow { background: #fef3c7; color: var(--yellow-text); border: 2px solid var(--yellow-border); }
+    .badge.green { background: #dcfce7; color: var(--green-text); border: 2px solid var(--green-border); }
+    .badge.blue { background: #e0f2fe; color: var(--blue-text); border: 2px solid var(--blue-border); }
+    .badge.purple { background: #f3e8ff; color: var(--purple-text); border: 2px solid var(--purple-border); }
+
+    /* 標題與副標 */
+    h1.slide-title {
+      font-size: 2.25rem;
+      font-weight: 900;
+      color: var(--text-dark);
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    p.slide-subtitle {
+      font-size: 1.15rem;
+      color: var(--text-soft);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    /* 網格版型 */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 26px;
+      align-items: center;
+      width: 100%;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      width: 100%;
+    }
+
+    /* 可愛卡片 */
+    .cute-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 22px;
+      padding: 22px;
+      border: 3px solid #fce7f3;
+      box-shadow: var(--card-shadow);
+      transition: all 0.25s ease;
+    }
+    .cute-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px -6px rgba(244, 114, 182, 0.16);
+    }
+    .cute-card.pink { border-color: var(--pink-border); background: var(--pink-card); }
+    .cute-card.yellow { border-color: var(--yellow-border); background: var(--yellow-card); }
+    .cute-card.green { border-color: var(--green-border); background: var(--green-card); }
+    .cute-card.blue { border-color: var(--blue-border); background: var(--blue-card); }
+    .cute-card.purple { border-color: var(--purple-border); background: var(--purple-card); }
+
+    .cute-card h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cute-card p, .cute-card li {
+      font-size: 1.02rem;
+      line-height: 1.65;
+      color: #4a4036;
+    }
+    .cute-card ul {
+      margin-left: 20px;
+      margin-top: 6px;
+    }
+    .cute-card li {
+      margin-bottom: 6px;
+    }
+
+    /* 插圖框 */
+    .illustration-box {
+      background: #ffffff;
+      border: 3px solid #fef08a;
+      border-radius: 26px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+    }
+    .illustration-box img {
+      max-height: 200px;
+      max-width: 88%;
+      object-fit: contain;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.06));
+    }
+    .illustration-caption {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text-soft);
+      line-height: 1.45;
+    }
+
+    /* 階梯卡片流程（純號碼牌，絕無箭頭符號） */
+    .step-list {
+      display: flex;
+      gap: 14px;
+      margin-top: 16px;
+      width: 100%;
+    }
+    .step-item {
+      flex: 1;
+      background: #ffffff;
+      border: 2px solid var(--blue-border);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: var(--card-shadow);
+    }
+    .step-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--blue-accent);
+      color: #ffffff;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    /* 可愛引言框 */
+    .cute-quote {
+      background: #fffdf5;
+      border: 3px dashed var(--yellow-accent);
+      border-radius: 22px;
+      padding: 18px 22px;
+      margin: 14px 0;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #854d0e;
+      line-height: 1.6;
+    }
+    .cute-quote-author {
+      text-align: right;
+      font-size: 0.95rem;
+      color: var(--yellow-accent);
+      margin-top: 6px;
+      font-weight: 800;
+    }
+
+    /* 底部導航列 */
+    #nav-bar {
+      height: 68px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(10px);
+      border-top: 2px solid #fed7aa;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 100;
+    }
+
+    .nav-btn {
+      background: #fdf2f4;
+      border: 2px solid var(--pink-border);
+      color: var(--pink-text);
+      padding: 8px 20px;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: var(--font-cute);
+      transition: all 0.2s ease;
+    }
+    .nav-btn:hover {
+      background: var(--pink-accent);
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+    .nav-btn.secondary {
+      background: #f0f9ff;
+      border-color: var(--blue-border);
+      color: var(--blue-text);
+    }
+    .nav-btn.secondary:hover {
+      background: var(--blue-accent);
+      color: #ffffff;
+    }
+
+    #slide-indicator {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-soft);
+      background: #fff7ed;
+      padding: 6px 16px;
+      border-radius: 999px;
+      border: 1px solid #fed7aa;
+    }
+
+    /* 總覽視窗 */
+    #overview-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(253, 250, 245, 0.97);
+      backdrop-filter: blur(12px);
+      z-index: 200;
+      display: none;
+      flex-direction: column;
+      padding: 32px 48px;
+      overflow-y: auto;
+    }
+    #overview-modal.open {
+      display: flex;
+    }
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .overview-thumb {
+      background: #ffffff;
+      border: 2px solid #fed7aa;
+      border-radius: 18px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .overview-thumb:hover, .overview-thumb.current {
+      border-color: var(--pink-accent);
+      background: var(--pink-card);
+      transform: scale(1.02);
+    }
+    .overview-thumb h4 {
+      font-size: 0.95rem;
+      color: var(--text-dark);
+      margin-top: 4px;
+    }
+
+    @media (max-width: 900px) {
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .slide { padding: 20px 24px; }
+      h1.slide-title { font-size: 1.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部馬卡龍彩虹進度條 -->
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+
+  <!-- 投影片主內容 -->
+  <main id="deck">
+
+    <!-- Slide 1: 可愛封面 -->
+    <section class="slide active">
+      <div style="max-width: 860px; margin: 0 auto; text-align: center;">
+        <span class="badge pink">🌸 專業倫理圖文講義 • 畢業生專題</span>
+        <h1 class="slide-title" style="font-size: 3.1rem; color: #db2777; margin-bottom: 12px;">
+          康德義務論的核心理念<br><span style="color: #0284c7;">與職場實踐剖析</span>
+        </h1>
+        <p class="slide-subtitle" style="font-size: 1.25rem; max-width: 720px; margin: 0 auto 28px auto;">
+          當剛剛踏出校門的你，面對主管施壓、同儕妥協與利益誘惑，定言令式如何指引我們堅守不可退讓的良心底線？
+        </p>
+
+        <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 28px;">
+          <div class="cute-card yellow" style="padding: 12px 22px; border-radius: 18px;">
+            <div style="font-weight: 800; color: var(--yellow-text); font-size: 0.95rem;">🌱 哲學核心指引</div>
+            <div style="font-weight: 700; color: var(--text-dark);">動機純粹性 • 定言令式 • 人是目的非工具</div>
+          </div>
+          <div class="cute-card blue" style="padding: 12px 22px; border-radius: 18px;">
+            <div style="font-weight: 800; color: var(--blue-text); font-size: 0.95rem;">🎒 職場四大試煉</div>
+            <div style="font-weight: 700; color: var(--text-dark);">辦公室文具 • 醫療隱瞞 • 評分放水 • 資安交付</div>
+          </div>
+        </div>
+
+        <p style="color: var(--text-soft); font-size: 1rem; font-weight: 700;">
+          💡 請點擊下方「下一張」按鈕，或按鍵盤 [空白鍵] 開始探索！
+        </p>
+      </div>
+    </section>
+
+    <!-- Slide 2: 動機論與善的意志 -->
+    <section class="slide">
+      <span class="badge yellow">✨ 第 1 站：純粹的心靈</span>
+      <h1 class="slide-title">善的意志：做對的事，只因它是對的</h1>
+      <p class="slide-subtitle">行為的道德價值不在於外在後果賺了多少，而在於內心是否出於對義務的純粹敬重。</p>
+
+      <div class="grid-2">
+        <div class="cute-card pink">
+          <h3 style="color: var(--pink-text);">🧁 動機純度三階梯卡片</h3>
+          
+          <div style="background:#ffffff; border-radius:14px; padding:12px; margin-bottom:10px; border:2px solid #fed7aa;">
+            <div style="font-weight:800; color:#d97706; font-size:0.95rem;">階梯 1 • 出於自利（做做表面）</div>
+            <p style="font-size:0.95rem; margin-top:2px;">商家為了好名聲、防被抓而不欺騙。行為表面合法，但只是功利算計，<strong>無真實道德價值</strong>。</p>
+          </div>
+
+          <div style="background:#ffffff; border-radius:14px; padding:12px; margin-bottom:10px; border:2px solid #e9d5ff;">
+            <div style="font-weight:800; color:#9333ea; font-size:0.95rem;">階梯 2 • 出於直接愛好與同情</div>
+            <p style="font-size:0.95rem; margin-top:2px;">因為心情好或同情心氾濫而行善。行為雖好，但缺乏理性的穩固支撐。</p>
+          </div>
+
+          <div style="background:#ecfdf5; border-radius:14px; padding:12px; border:2px solid #34d399;">
+            <div style="font-weight:800; color:#059669; font-size:0.95rem;">階梯 3 • 出於義務（最高純度）</div>
+            <p style="font-size:0.95rem; margin-top:2px;">即使面臨同儕孤立、即使完全沒有好處，只因認識到「這是道德律的召喚」，依然堅定履行！<strong>具備純粹道德價值</strong>。</p>
+          </div>
+        </div>
+
+        <div>
+          <div class="cute-quote">
+            「在整個世界上，唯一能被無條件視為美好的事物，就是<strong>善的意志（Good Will）</strong>。」
+            <div class="cute-quote-author">—— 伊曼努爾·康德</div>
+          </div>
+
+          <div class="illustration-box" style="padding:14px;">
+            <img src="../assets/study_school_jugyou_woman.png" alt="講台上的女教授" style="max-height:160px;">
+            <div class="illustration-caption">
+              「手段的正當性先於後果的好壞」<br>
+              在職場拉扯時，先問自己這件事本身是否正當，而非能換得多少考績。
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 3: 定言令式 vs 假言令式 -->
+    <section class="slide">
+      <span class="badge blue">🧭 第 2 站：最高道德指針</span>
+      <h1 class="slide-title">定言令式：不講條件的絕對法則</h1>
+      <p class="slide-subtitle">區分「利益交換的條件句」與「不可動搖的純粹令式」。</p>
+
+      <div class="grid-2">
+        <div class="cute-card yellow">
+          <span class="badge yellow">條件式交換</span>
+          <h3 style="color: var(--yellow-text);">假言令式 (Hypothetical)</h3>
+          <p><strong>「如果你想要獲得 X，你就必須做 Y。」</strong></p>
+          <ul>
+            <li>職場實例：「如果我想順利通過三個月試用期，我就必須配合主管隱瞞安全漏洞。」</li>
+            <li>盲點本質：純粹是利益交換的工具。一旦目標改變或自認不會被抓，原則隨時拋棄！</li>
+          </ul>
+        </div>
+
+        <div class="cute-card green">
+          <span class="badge green">無條件律令</span>
+          <h3 style="color: var(--green-text);">定言令式 (Categorical)</h3>
+          <p><strong>「無論如何，你都應當如此行動！」</strong></p>
+          <ul>
+            <li>職場實例：「不可在安全報告上簽署虛假數據，因為造假本身在理性上是自我毀滅的。」</li>
+            <li>本質光芒：無條件、具備壓倒性（Overriding）的約束力，適用於所有理性人，毫無特權例外。</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 乾淨雙步驟卡（無箭頭） -->
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-badge">1</div>
+          <h4 style="font-weight: 800; color: var(--text-dark);">普遍法則公式</h4>
+          <p style="font-size: 0.95rem; color: var(--text-soft);">我的行動格準，能否理論上成為全世界通行的普遍法則？</p>
+        </div>
+        <div class="step-item" style="border-color: var(--pink-border);">
+          <div class="step-badge" style="background: var(--pink-accent);">2</div>
+          <h4 style="font-weight: 800; color: var(--text-dark);">目的自身公式</h4>
+          <p style="font-size: 0.95rem; color: var(--text-soft);">對待任何人（包括自己），永遠當作目的，絕不僅僅是工具！</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 4: 普遍法則公式解析 -->
+    <section class="slide">
+      <span class="badge pink">🔍 第 3 站：邏輯大檢驗</span>
+      <h1 class="slide-title">公式一：如果所有人都這樣做，世界會崩塌嗎？</h1>
+      <p class="slide-subtitle">普遍法則公式（Formula of Universal Law）—— 戳破「只有我一次沒關係」的自私藉口。</p>
+
+      <div class="grid-2">
+        <div>
+          <div class="cute-card purple">
+            <h3 style="color: var(--purple-text);">🎨 四步邏輯矛盾檢驗盒</h3>
+            
+            <div style="background:#ffffff; border-radius:12px; padding:10px 14px; margin-bottom:8px; border:2px solid #e9d5ff;">
+              <strong>步驟 1 • 提煉個人念頭</strong>：
+              <div style="font-size:0.95rem; color:#4a4036;">「只要對我晉升有利，我可以許下虛假的合規承諾或隱匿瑕疵。」</div>
+            </div>
+
+            <div style="background:#ffffff; border-radius:12px; padding:10px 14px; margin-bottom:8px; border:2px solid #fed7aa;">
+              <strong>步驟 2 • 普遍化設想</strong>：
+              <div style="font-size:0.95rem; color:#4a4036;">「設想全世界所有工程師，只要遇到升遷，都在許下假承諾。」</div>
+            </div>
+
+            <div style="background:#fff1f2; border-radius:12px; padding:10px 14px; margin-bottom:8px; border:2px solid #fecdd3;">
+              <strong style="color:#e11d48;">步驟 3 • 概念自我毀滅</strong>：
+              <div style="font-size:0.95rem; color:#4a4036;">在所有人都在說謊的世界裡，<strong>「承諾」概念將徹底崩潰</strong>！沒人會再相信任何保證。</div>
+            </div>
+
+            <div style="background:#f0fdf4; border-radius:12px; padding:10px 14px; border:2px solid #bbf7d0;">
+              <strong style="color:#16a34a;">步驟 4 • 絕對禁止判定</strong>：
+              <div style="font-size:0.95rem; color:#4a4036;">該念頭在理性上自我矛盾，因此<strong>完全禁止（Perfect Duty）</strong>，不容開特例。</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="illustration-box">
+          <img src="../assets/poster_ihan_rakugaki_man.png" alt="違規塗鴉的男士">
+          <div class="illustration-caption">
+            「別以為四下無人就可以為自己開特例」<br>
+            普遍法則檢驗證明：任由破窗蔓延，社會的聘僱信任將瞬間解體。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 5: 目的自身公式解析 -->
+    <section class="slide">
+      <span class="badge green">💖 第 4 站：溫柔的底線</span>
+      <h1 class="slide-title">公式二：人是目的，絕非單純的工具</h1>
+      <p class="slide-subtitle">目的自身公式（Formula of Humanity as an End）—— 捍衛每一個人的理性自主與神聖尊嚴。</p>
+
+      <div class="grid-2">
+        <div>
+          <div class="cute-card green" style="margin-bottom:14px;">
+            <h3 style="color: var(--green-text);">🧸 什麼是「將人當作目的」？</h3>
+            <ul>
+              <li><strong>尊重對方的理性自主權（Autonomy）</strong>：每個人都有知情、理解並做出自主決定的神聖權利。</li>
+              <li><strong>禁止欺瞞與資訊遮蔽</strong>：刻意隱瞞資訊，等同把對方當成任由自己擺布的小白鼠。</li>
+              <li><strong>知情同意（Informed Consent）的核心</strong>：不論是病患、學生還是消費者，都有權知道真相。</li>
+            </ul>
+          </div>
+
+          <div class="cute-card pink">
+            <h3 style="color: var(--pink-text);">🚫 職場常見的「工具人」陷阱</h3>
+            <ul>
+              <li><strong>把病患當工具</strong>：為了省事，擅自替清醒的長輩隱瞞真實病情。</li>
+              <li><strong>把學生當工具</strong>：為了討好金主換取教職，隨意改動學生成績。</li>
+              <li><strong>把大眾當工具</strong>：為了融資進度，將數百萬用戶置於資安風險中充當肉盾。</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="illustration-box">
+          <img src="../assets/syuwa_tsuujinai.png" alt="溝通障礙與手語表達">
+          <div class="illustration-caption">
+            「資訊不對等不是剝削的藉口」<br>
+            專業人士的受託責任，是彌平理解落差、賦予求助者自主知情的尊嚴。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 6: 案例一 辦公室微腐敗 -->
+    <section class="slide">
+      <span class="badge yellow">🎒 實例 1 • 辦公室日常</span>
+      <h1 class="slide-title">同事私帶公物回家：「反正大家都拿，不拿白不拿」</h1>
+      <p class="slide-subtitle">剛入職的新人阿豪，面對老鳥塞過來的進口高價簡報筆...</p>
+
+      <div class="grid-2">
+        <div>
+          <div class="cute-card yellow" style="margin-bottom: 14px;">
+            <h4 style="font-weight: 800; color: var(--yellow-text); margin-bottom: 6px;">📍 兩難情境還原</h4>
+            <p>老鳥阿凱打開背包裝滿了高價文具，還塞一支給阿豪說：「組內大家都這樣拿，這是隱形福利，你不收就是自命清高、不合群！」</p>
+          </div>
+          
+          <div class="cute-card blue">
+            <h4 style="font-weight: 800; color: var(--blue-text); margin-bottom: 8px;">🧁 阿豪的拒絕三部曲階梯卡</h4>
+            
+            <div style="background:#ffffff; border-radius:10px; padding:8px 12px; margin-bottom:6px; border:1px solid #bae6fd;">
+              <strong>1. 普遍化檢驗</strong>：偷竊無法普遍化。無論是一支筆還是一台電腦，私自占有在概念上必然自毀聘僱契約。
+            </div>
+            <div style="background:#ffffff; border-radius:10px; padding:8px 12px; margin-bottom:6px; border:1px solid #bae6fd;">
+              <strong>2. 辨識情境類型</strong>：這不是道德兩難，而是<strong>「道德誘惑（Moral Temptation）」</strong>！對錯清晰，考驗品格意志。
+            </div>
+            <div style="background:#ffffff; border-radius:10px; padding:8px 12px; border:1px solid #bae6fd;">
+              <strong>3. 元氣行動指引</strong>：禮貌將筆放回桌上，表明公私分明；只為自己經辦事務簽章，絕不在虛假盤點單上背書。
+            </div>
+          </div>
+        </div>
+
+        <div class="illustration-box">
+          <img src="../assets/job_roudou_kijun_kantokukan_black_kigyou.png" alt="職場誠信與勞動監管">
+          <div class="illustration-caption">
+            「微小的貪婪是誠信崩壞的第一張骨牌」<br>
+            不要因為同儕壓力，讓自己不知不覺淪為體制惡習的小齒輪。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 7: 案例二 醫療知情權 -->
+    <section class="slide">
+      <span class="badge green">🏥 實例 2 • 白袍的考驗</span>
+      <h1 class="slide-title">病患知情權 vs 家屬強硬隱瞞：「絕對不能跟我爸說實話」</h1>
+      <p class="slide-subtitle">新進護理師小雯，面對渴望知道餘生時間以交代後事的胃癌末期阿公...</p>
+
+      <div class="grid-2">
+        <div class="illustration-box">
+          <img src="../assets/job_syokugyou_taiken_kangoshi_boy.png" alt="護理師執業實習">
+          <div class="illustration-caption">
+            「誰才是你的第一受託人？」<br>
+            護理專業誓詞的最高忠誠，永遠屬於無助脆弱的病患本人。
+          </div>
+        </div>
+
+        <div>
+          <div class="cute-card pink" style="margin-bottom: 12px;">
+            <h4 style="font-weight: 800; color: var(--pink-text); margin-bottom: 6px;">📍 兩難情境還原</h4>
+            <p>阿公誠懇想知道切片結果以交代後事，家屬卻威脅若敢透露就投訴到底，醫師也默許交代小雯順著家屬意思說謊。</p>
+          </div>
+          
+          <div class="cute-card green">
+            <h4 style="font-weight: 800; color: var(--green-text); margin-bottom: 6px;">🧁 受託責任核心結構圖</h4>
+            <ul>
+              <li><strong>核心受託圈（病患本人）</strong>：具備意識的阿公享有完整的知情同意權，家長式作風無權擅自剝奪其安排餘生的尊嚴。</li>
+              <li><strong>護理師絕對不能參與說謊</strong>：說謊違背定言令式，小雯若配合欺騙即成為系統性瞞騙的共犯。</li>
+              <li><strong>行動建議</strong>：不當面說謊，主動推進醫療團隊召開跨專業正式家庭病情說明會，落實知情權。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 8: 案例三 學術放水與 Tenure 威脅 -->
+    <section class="slide">
+      <span class="badge purple">🎓 實例 3 • 象牙塔生存戰</span>
+      <h1 class="slide-title">資深大老放水評分換贊助：「想拿 Tenure 就懂事點」</h1>
+      <p class="slide-subtitle">青年助理教授林博士，發現合開課程的大老 A 教授給曠課作弊的金主二代打 85 分...</p>
+
+      <div class="grid-2">
+        <div>
+          <div class="cute-card purple" style="margin-bottom: 12px;">
+            <h4 style="font-weight: 800; color: var(--purple-text); margin-bottom: 6px;">📍 兩難情境還原</h4>
+            <p>A 教授掌握林博士明年終身教職（Tenure）評審大權，暗示「為大局著想才能留在系上」，否則六年條款直接不續聘！</p>
+          </div>
+          
+          <div class="cute-card yellow">
+            <h4 style="font-weight: 800; color: var(--yellow-text); margin-bottom: 6px;">🧁 角色特殊義務 vs 個人生存天平盒</h4>
+            <ul>
+              <li><strong>教師角色特殊義務（重）</strong>：捍衛客觀學術標準，對所有辛勤苦讀學生的受教公平負責。</li>
+              <li><strong>個人的自利交換（輕）</strong>：迎合權威保全教職，把學位文憑變質為逢迎贊助金主的商品。</li>
+              <li><strong>康德剛性宣告</strong>：絕不將學生當作換取職位的工具。若妥協第一次，當拿到 Tenure 時，自己也成了下一個大老。</li>
+              <li><strong>智慧自保</strong>：堅守自己負責區塊實打成績；離線備份原始卷證，以防不當考核報復。</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="illustration-box">
+          <img src="../assets/online_school_girl.png" alt="認真學習的女學生">
+          <div class="illustration-caption">
+            「學術文憑的榮譽不容作假」<br>
+            若在強權前跪下第一次，當你拿到 Tenure 時，早已變成當初痛恨的大老。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 9: 案例四 科技交付壓力與資安漏洞 -->
+    <section class="slide">
+      <span class="badge blue">💻 實例 4 • 鍵盤背後的防線</span>
+      <h1 class="slide-title">系統漏洞 vs 融資上線：「主管命令刪除日誌，否則試用期掰掰」</h1>
+      <p class="slide-subtitle">金融科技新人工程師志偉，在上線前三天發現可任意轉走存戶資金的越權漏洞...</p>
+
+      <div class="grid-2">
+        <div class="illustration-box">
+          <div style="display:flex; gap:10px; justify-content:center; align-items:center;">
+            <img src="../assets/computer_programming_woman.png" alt="軟體工程師" style="max-height:160px;">
+            <img src="../assets/display_monitor_computer_broken.png" alt="系統漏洞故障" style="max-height:120px;">
+          </div>
+          <div class="illustration-caption">
+            「你敲下的代碼，是數位時代的無形大橋」<br>
+            工程師手中的簽核權，承載著數百萬家庭的財產安全。
+          </div>
+        </div>
+
+        <div>
+          <div class="cute-card blue" style="margin-bottom: 12px;">
+            <h4 style="font-weight: 800; color: var(--blue-text); margin-bottom: 6px;">📍 兩難情境還原</h4>
+            <p>副總拍桌怒吼：「延期發布融資破局大家沒薪水！立刻刪除測試日誌簽署部署單，別忘了你還在試用期！」</p>
+          </div>
+          
+          <div class="cute-card green">
+            <h4 style="font-weight: 800; color: var(--green-text); margin-bottom: 6px;">🧁 抗拒盲從的工程決策漏斗</h4>
+            <ul>
+              <li><strong>抗拒米爾格倫效應</strong>：拒絕因主管的權威怒吼而成為按下電擊按鈕的盲從者。</li>
+              <li><strong>普遍法則檢驗</strong>：若全體工程師都因試用期隱瞞漏洞，科技社會的代碼信任將全面坍塌。</li>
+              <li><strong>建設性說不 (Constructive Dissent)</strong>：發布會如期召開展示前台 UI，但後台暫時關閉該漏洞接口僅開放白名單，爭取 48 小時熱修補。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 10: 局限與實踐反思 -->
+    <section class="slide">
+      <span class="badge pink">🌈 第 5 站：溫柔的思辨</span>
+      <h1 class="slide-title">康德理論太剛硬？現代倫理學的溫柔修正</h1>
+      <p class="slide-subtitle">在複雜殘酷的真實職場中，我們該如何有智慧地實踐義務論？</p>
+
+      <div class="grid-2">
+        <div class="cute-card pink">
+          <h3 style="color: var(--pink-text);">🧁 三層義務安全防護網</h3>
+          
+          <div style="background:#ffffff; border-radius:12px; padding:10px 14px; margin-bottom:8px; border:2px solid #fbcfe8;">
+            <strong style="color:#db2777;">網層 1 • 門口兇手難題與反思</strong>
+            <p style="font-size:0.95rem; margin-top:2px;">康德堅持面對兇手仍不能說謊。但在現實中，為拯救生命而隱瞞是常識道德。過度死板會好心辦壞事。</p>
+          </div>
+
+          <div style="background:#ffffff; border-radius:12px; padding:10px 14px; margin-bottom:8px; border:2px solid #fef08a;">
+            <strong style="color:#b45309;">網層 2 • 界限義務論 (Threshold Deontology)</strong>
+            <p style="font-size:0.95rem; margin-top:2px;">現代倫理學提出折衷方案：常態下嚴守原則底線；唯有面對毀滅性極端災難時，破例允許以後果考量保護生命。</p>
+          </div>
+
+          <div style="background:#ffffff; border-radius:12px; padding:10px 14px; border:2px solid #bbf7d0;">
+            <strong style="color:#059669;">網層 3 • 羅斯顯見義務論 (Ross's Intuitionism)</strong>
+            <p style="font-size:0.95rem; margin-top:2px;">當義務相撞時汲取羅斯智慧：<strong>「不傷害原則（Non-maleficence）」永遠是最高優先級</strong>！</p>
+          </div>
+        </div>
+
+        <div class="illustration-box">
+          <img src="../assets/seiji_souridaijin_woman_kaiken.png" alt="公開記者會說明">
+          <div class="illustration-caption">
+            「真正的專業倫理不是冷酷的教條」<br>
+            而是結合「不可逾越的底線」與「同理心」的實踐智慧（Phronesis）。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 11: 總結元氣守則 -->
+    <section class="slide">
+      <div style="max-width: 860px; margin: 0 auto; text-align: center;">
+        <span class="badge yellow">🌟 結語 • 新人的元氣能量盒</span>
+        <h1 class="slide-title" style="font-size: 2.8rem; color: #db2777; margin-bottom: 16px;">
+          從消極不作惡，到主動的道德勇氣
+        </h1>
+
+        <div class="cute-quote" style="text-align: left; margin-bottom: 22px;">
+          「事情的真相是，你永遠知道正確該做的事是什麼。困難的地方在於去執行它。」
+          <div class="cute-quote-author">—— 諾曼·史瓦茲柯夫將軍</div>
+        </div>
+
+        <div class="grid-3" style="text-align: left; margin-bottom: 26px;">
+          <div class="cute-card blue">
+            <h4 style="font-weight: 800; color: var(--blue-text); margin-bottom: 4px;">1. 普遍化濾鏡</h4>
+            <p style="font-size: 0.95rem;">如果你做的事變成全世界的潛規則，這個社會還能運轉嗎？</p>
+          </div>
+          <div class="cute-card pink">
+            <h4 style="font-weight: 800; color: var(--pink-text); margin-bottom: 4px;">2. 人是目的</h4>
+            <p style="font-size: 0.95rem;">永遠不要把別人當成自己換取考績與升遷的跳板與道具。</p>
+          </div>
+          <div class="cute-card green">
+            <h4 style="font-weight: 800; color: var(--green-text); margin-bottom: 4px;">3. 守護底線</h4>
+            <p style="font-size: 0.95rem;">法律只是及格線。在西裝、白袍與鍵盤背後，用專業良知散發光芒！</p>
+          </div>
+        </div>
+
+        <div style="font-size: 1.15rem; font-weight: 800; color: var(--text-dark);">
+          🌱 做正確的事，只因為它是正確的！ —— 伊曼努爾·康德
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 底部溫暖控制列 -->
+  <footer id="nav-bar">
+    <div style="display: flex; gap: 12px; align-items: center;">
+      <button class="nav-btn" id="prev-btn" title="上一頁 (鍵盤向左鍵)">上一張</button>
+      <button class="nav-btn" id="next-btn" title="下一頁 (鍵盤向右鍵 / 空白鍵)">下一張</button>
+      <span id="slide-indicator">1 / 11</span>
+    </div>
+
+    <div style="display: flex; gap: 12px; align-items: center;">
+      <button class="nav-btn secondary" id="overview-btn" title="總覽縮圖 (鍵盤 O)">📑 講義總覽</button>
+      <button class="nav-btn secondary" id="fullscreen-btn" title="全螢幕切換 (鍵盤 F)">⛶ 全螢幕</button>
+    </div>
+  </footer>
+
+  <!-- 縮圖總覽彈窗 -->
+  <div id="overview-modal">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #fed7aa; padding-bottom: 14px;">
+      <h2 style="color: var(--text-dark); font-weight: 800;">📑 講義投影片全局導航</h2>
+      <button class="nav-btn" id="close-overview-btn">關閉總覽 (Esc)</button>
+    </div>
+    <div class="overview-grid" id="overview-grid-content"></div>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progress-bar');
+    const slideIndicator = document.getElementById('slide-indicator');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const overviewBtn = document.getElementById('overview-btn');
+    const closeOverviewBtn = document.getElementById('close-overview-btn');
+    const overviewModal = document.getElementById('overview-modal');
+    const overviewGridContent = document.getElementById('overview-grid-content');
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+
+    function updateSlide(index) {
+      if (index < 0) index = 0;
+      if (index >= totalSlides) index = totalSlides - 1;
+
+      slides.forEach((slide, i) => {
+        slide.classList.remove('active', 'prev');
+        if (i === index) {
+          slide.classList.add('active');
+        } else if (i < index) {
+          slide.classList.add('prev');
+        }
+      });
+
+      currentSlide = index;
+      const progress = ((index + 1) / totalSlides) * 100;
+      progressBar.style.width = progress + '%';
+      slideIndicator.textContent = `${index + 1} / ${totalSlides}`;
+
+      document.querySelectorAll('.overview-thumb').forEach((thumb, i) => {
+        thumb.classList.toggle('current', i === index);
+      });
+    }
+
+    function next() {
+      if (currentSlide < totalSlides - 1) updateSlide(currentSlide + 1);
+    }
+
+    function prev() {
+      if (currentSlide > 0) updateSlide(currentSlide - 1);
+    }
+
+    // 鍵盤導航監聽
+    window.addEventListener('keydown', (e) => {
+      if (overviewModal.classList.contains('open')) {
+        if (e.key === 'Escape') toggleOverview(false);
+        return;
+      }
+
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        next();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'Backspace') {
+        e.preventDefault();
+        prev();
+      } else if (e.key.toLowerCase() === 'o') {
+        toggleOverview(true);
+      } else if (e.key.toLowerCase() === 'f') {
+        toggleFullscreen();
+      }
+    });
+
+    prevBtn.addEventListener('click', prev);
+    nextBtn.addEventListener('click', next);
+
+    function toggleOverview(open) {
+      if (open) {
+        overviewGridContent.innerHTML = '';
+        slides.forEach((slide, i) => {
+          const title = slide.querySelector('h1')?.textContent || `Slide ${i + 1}`;
+          const badge = slide.querySelector('.badge')?.textContent || '';
+          const thumb = document.createElement('div');
+          thumb.className = `overview-thumb ${i === currentSlide ? 'current' : ''}`;
+          thumb.innerHTML = `
+            <div style="font-size:0.8rem; color:#db2777; font-weight:800;">第 ${i + 1} 頁 ${badge}</div>
+            <h4>${title}</h4>
+          `;
+          thumb.addEventListener('click', () => {
+            updateSlide(i);
+            toggleOverview(false);
+          });
+          overviewGridContent.appendChild(thumb);
+        });
+        overviewModal.classList.add('open');
+      } else {
+        overviewModal.classList.remove('open');
+      }
+    }
+
+    overviewBtn.addEventListener('click', () => toggleOverview(true));
+    closeOverviewBtn.addEventListener('click', () => toggleOverview(false));
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+    // 初始化第 1 頁
+    updateSlide(0);
+  </script>
+</body>
+</html>

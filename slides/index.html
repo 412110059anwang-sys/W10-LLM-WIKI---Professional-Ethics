@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>專業倫理簡報投影片導航中心</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #fffbf5 0%, #fef5ea 50%, #fbf3ee 100%);
+      color: #3e3228;
+      font-family: "Zen Maru Gothic", sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 24px;
+    }
+    .container {
+      max-width: 680px;
+      background: #ffffff;
+      border-radius: 28px;
+      border: 3px solid #fed7aa;
+      padding: 40px;
+      box-shadow: 0 16px 36px -10px rgba(244, 114, 182, 0.15);
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.2rem;
+      color: #db2777;
+      margin-bottom: 12px;
+      font-weight: 900;
+    }
+    p {
+      color: #78716c;
+      font-size: 1.1rem;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+    .card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .deck-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      border-radius: 20px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      border: 2px solid transparent;
+    }
+    .deck-card.pastel {
+      background: #fdf2f4;
+      border-color: #fbcfe8;
+      color: #db2777;
+    }
+    .deck-card.pastel:hover {
+      background: #fce7f3;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(244, 114, 182, 0.2);
+    }
+    .deck-card.classic {
+      background: #f0f9ff;
+      border-color: #bae6fd;
+      color: #0284c7;
+    }
+    .deck-card.classic:hover {
+      background: #e0f2fe;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(56, 189, 248, 0.2);
+    }
+    .deck-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      text-align: left;
+    }
+    .deck-desc {
+      font-size: 0.95rem;
+      color: #71717a;
+      text-align: left;
+      margin-top: 4px;
+    }
+    .go-btn {
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      background: #ffffff;
+      border: 2px solid currentColor;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌸 專業倫理圖文講義導航</h1>
+    <p>請選擇您想瀏覽的投影片風格版本：</p>
+
+    <div class="card-list">
+      <a href="pastel-kantian-handout.html" class="deck-card pastel">
+        <div>
+          <div class="deck-title">💖 明亮粉彩可愛圖文講義（最新推薦）</div>
+          <div class="deck-desc">馬卡龍粉彩色調 • 日系可愛圓體 • 豐富 Irasutoya 貼圖插畫 • 無箭頭純淨排版</div>
+        </div>
+        <span class="go-btn">點此開啟</span>
+      </a>
+
+      <a href="kantian-deontology.html" class="deck-card classic">
+        <div>
+          <div class="deck-title">🌃 深夜深藍經典演講版</div>
+          <div class="deck-desc">深藍毛玻璃風格 • 現代科技感排版 • 適合會議演講與高對比投影</div>
+        </div>
+        <span class="go-btn">點此開啟</span>
+      </a>
+    </div>
+  </div>
+</body>
+</html>
